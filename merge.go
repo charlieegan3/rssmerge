@@ -17,7 +17,19 @@ func Merge(rawFeeds []string) feeds.Feed {
 		feed, err := fp.ParseString(feed)
 		if err == nil {
 			for _, item := range feed.Items {
-				items = append(items, convertItem(item, feed))
+				published := item.PublishedParsed
+				updated := item.UpdatedParsed
+
+				if published == nil && updated == nil {
+					continue
+				}
+
+				time := published
+				if time == nil {
+					time = updated
+				}
+
+				items = append(items, convertItem(item, *time, feed))
 			}
 		}
 	}
@@ -36,11 +48,11 @@ func Merge(rawFeeds []string) feeds.Feed {
 	return feed
 }
 
-func convertItem(item *gofeed.Item, feed *gofeed.Feed) *feeds.Item {
+func convertItem(item *gofeed.Item, created time.Time, feed *gofeed.Feed) *feeds.Item {
 	return &feeds.Item{
 		Title:       item.Title,
 		Link:        &feeds.Link{Href: item.Link},
-		Created:     *item.PublishedParsed,
+		Created:     created,
 		Description: feed.Title,
 	}
 }
