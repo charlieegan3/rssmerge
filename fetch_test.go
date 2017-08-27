@@ -11,9 +11,9 @@ import (
 
 func TestFetch(t *testing.T) {
 	rawFeeds := []string{
-		"http://golangweekly.com/rss/25364iih",
+		"http://golangweekly.com/rss",
 		"http://n-gate.com/hackernews/index.atom",
-		"http://rubyweekly.com/rss/1l5b1noa",
+		"http://rubyweekly.com/rss",
 		"https://blog.mode7games.com/feed",
 		"https://charlieegan3.com/feed",
 		"https://githubengineering.com/atom.xml",
