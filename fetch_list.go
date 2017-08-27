@@ -7,9 +7,9 @@ import (
 	"strings"
 )
 
-// Fetch will visit a plaintext URL and extract the list of links
+// FetchList will visit a plaintext URL and extract the list of links
 // Suggested sources are gists or pastebin
-func Fetch(source *url.URL) ([]url.URL, error) {
+func FetchList(source *url.URL) ([]url.URL, error) {
 	resp, err := http.Get(source.String())
 	if err != nil {
 		return []url.URL{}, err

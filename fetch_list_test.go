@@ -36,7 +36,7 @@ func TestFetch(t *testing.T) {
 
 	sourceURL, _ := url.Parse(localServer.URL + "/source_gist")
 
-	resultingFeeds, err := Fetch(sourceURL)
+	resultingFeeds, err := FetchList(sourceURL)
 
 	if err != nil {
 		t.Error(err)
@@ -64,7 +64,7 @@ func TestFetchInvalid(t *testing.T) {
 
 	sourceURL, _ := url.Parse(localServer.URL + "/source_gist")
 
-	resultingFeeds, err := Fetch(sourceURL)
+	resultingFeeds, err := FetchList(sourceURL)
 
 	if err != nil {
 		t.Error(err)
