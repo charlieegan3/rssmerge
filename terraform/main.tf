@@ -6,10 +6,15 @@ variable domain {
   default = "rssmerge.charlieegan3.com"
 }
 
-data "aws_caller_identity" "current" {}
-
 variable "region" {
   default = "us-east-1"
+}
+
+data "aws_caller_identity" "current" {}
+
+data "aws_acm_certificate" "default" {
+  domain   = "charlieegan3.com"
+  statuses = ["ISSUED"]
 }
 
 terraform {
