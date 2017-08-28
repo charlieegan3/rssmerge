@@ -11,4 +11,8 @@ resource "aws_api_gateway_usage_plan" "MyUsagePlan" {
     burst_limit = 10
     rate_limit  = 25
   }
+
+  depends_on = [
+    "aws_api_gateway_deployment.default",
+  ]
 }
