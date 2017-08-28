@@ -6,6 +6,8 @@ variable domain {
   default = "rssmerge.charlieegan3.com"
 }
 
+variable "zone_id" {}
+
 variable "region" {
   default = "us-east-1"
 }

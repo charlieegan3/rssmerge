@@ -24,6 +24,17 @@ resource "aws_api_gateway_deployment" "default" {
   stage_description = "${md5(file("api_gateway.tf"))}"
 }
 
+resource "aws_api_gateway_domain_name" "default" {
+  domain_name     = "api-${var.domain}"
+  certificate_arn = "${data.aws_acm_certificate.default.arn}"
+}
+
+resource "aws_api_gateway_base_path_mapping" "default" {
+  api_id      = "${aws_api_gateway_rest_api.default.id}"
+  stage_name  = "${aws_api_gateway_deployment.default.stage_name}"
+  domain_name = "${aws_api_gateway_domain_name.default.domain_name}"
+}
+
 resource "aws_api_gateway_method_settings" "default" {
   rest_api_id = "${aws_api_gateway_rest_api.default.id}"
   stage_name  = "${var.api_gateway_stage}"
