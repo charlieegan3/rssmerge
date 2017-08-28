@@ -49,6 +49,9 @@ func Merge(rawFeeds []string) feeds.Feed {
 }
 
 func convertItem(item *gofeed.Item, created time.Time, feed *gofeed.Feed) *feeds.Item {
+	if item.Link == "" {
+		item.Link = feed.Link
+	}
 	return &feeds.Item{
 		Title:       item.Title,
 		Link:        &feeds.Link{Href: item.Link},
