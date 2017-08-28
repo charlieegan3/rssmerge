@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html >
+  <head>
+    <title>RSSMerge - Create Combined RSS Feeds</title>
+    <meta name="description" content="Scan sites for broken links">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tachyons/4.7.4/tachyons.css" />
+    <link href="https://fonts.googleapis.com/css?family=Wellfleet" rel="stylesheet">
+    <style>
+      .header-font {
+        font-family: 'Wellfleet', cursive;
+      }
+      tr:nth-child(even) {
+        background-color: #eee;
+      }
+    </style>
+
+    <script src="https://cdn.ravenjs.com/3.17.0/raven.min.js" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+      Raven.config('https://c262e9d683fb43a8ae11b1d1e113b5f6@sentry.io/209237').install()
+
+      var rssMerge= {
+        input: null,
+        result: null,
+        init: function() {
+          rssMerge.input = document.getElementById("source")
+          rssMerge.result = document.getElementById("result")
+          if (rssMerge.input == null || rssMerge.result == null) {
+            window.setTimeout(rssMerge.init, 1);
+            return
+          }
+          rssMerge.input.oninput = rssMerge.showURL;
+        },
+
+        showURL: function() {
+          var sourceURL = rssMerge.input.value.replace(/^\s+|\s+$/g, '');
+          if (rssMerge.isValidURL(sourceURL)) {
+            var combinedURL = "https://api-rssmerge.charlieegan3.com/build?source=" + sourceURL
+            rssMerge.input.value = sourceURL;
+            result.innerHTML = "Your combined URL: "
+            result.innerHTML += '<a target="_blank" href="' + combinedURL + '">' + combinedURL +  '</a>'
+            result.classList.remove("dn");
+          } else {
+            result.classList.add("dn");
+          }
+        },
+
+        isValidURL: function(urlString) {
+          var a  = document.createElement('a');
+          a.href = urlString;
+          return (a.host && a.host != window.location.host);
+        }
+      };
+
+      rssMerge.init();
+    </script>
+  </head>
+  <body class="bg-near-white system-sans-serif ma2 measure">
+    <h1 class="f1">
+      <a class="grow no-underline dim" href="/">
+        <span class="header-font orange">RSS</span>
+        <span class="blue">&#x1f500;</span>
+        <span class="header-font dark-green">Merge</span>
+      </a>
+    </h1>
+
+    <p>
+      This tool takes a list of feeds and interleaves them to create a new
+      combined feed.
+    </p>
+
+    <p>
+      RSSMerge is 'bring-your-own-state'. This means you need to paste your feed
+      URLs into a gist or something, like this <a target="_blank" href="https://gist.githubusercontent.com/charlieegan3/9190409c458bc4aa17ef52a8b682aba4/raw/60043038a1c8f668acddb506db58bdc049f144bd/rssmerge_sample">one</a>.
+    </p>
+
+    <p>
+      The format needs to be one feed URL per line, like this:
+    </p>
+
+    <pre class="dark-gray">
+  http://site.com/rss
+  https://coolblog.co.uk/blog/atom.xml
+  http://newspaper.org/feed.rss
+  https://blog.company.com/feed.atom
+    </pre>
+
+    <p>
+      Once you've created your Gist/Pastebin/plaintext-thing, paste the
+      the <strong>raw content url</strong> here:
+    </p>
+
+    <div class="mw6-ns w-100">
+      <input id="source" type="text" class="mb1 db w-100 pa2 ba b--gray input-reset" placeholder="Enter source raw URL, Gist or otherwise"/>
+    </div>
+
+    <p id="result" class="dn"></p>
+
+    <p class="gray f7">
+      Made in a little but of a hurry by <a class="blue" href="https://charlieegan3.com">charlieegan3</a>.
+      Code on <a class="blue" href="https://github.com/charlieegan3/rssmerge">GitHub</a>.
+    </p>
+  </body>
+</html>
