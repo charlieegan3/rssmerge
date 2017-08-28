@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/gorilla/feeds"
@@ -13,9 +15,12 @@ func Merge(rawFeeds []string) feeds.Feed {
 	fp := gofeed.NewParser()
 
 	var items itemList
+	var feedList []string
 	for _, feed := range rawFeeds {
 		feed, err := fp.ParseString(feed)
 		if err == nil {
+			feedList = append(feedList, feed.Title)
+
 			for _, item := range feed.Items {
 				published := item.PublishedParsed
 				updated := item.UpdatedParsed
@@ -37,10 +42,10 @@ func Merge(rawFeeds []string) feeds.Feed {
 	sort.Sort(sort.Reverse(items))
 
 	feed := feeds.Feed{
-		Title:       "Merged Feed",
-		Link:        &feeds.Link{Href: "http://charlieegan3.com/feed"},
-		Description: "Merged feed from XYZ",
-		Author:      &feeds.Author{Name: "RSS Merge", Email: "rssmerge@charlieegan3.com"},
+		Title:       fmt.Sprintf("RSSMerge Feed (%v feeds)", len(feedList)),
+		Link:        &feeds.Link{Href: "PLACEHOLDER"},
+		Description: strings.Join(feedList, ", "),
+		Author:      &feeds.Author{Name: "RSSMerge", Email: "rssmerge@charlieegan3.com"},
 		Created:     time.Now(),
 		Items:       items,
 	}

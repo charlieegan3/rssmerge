@@ -68,6 +68,7 @@ func RSSMergeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	mergedFeed := Merge(rawFeeds)
+	mergedFeed.Link.Href = sourceURL.String()
 
 	rss, err := mergedFeed.ToRss()
 	if err != nil {
