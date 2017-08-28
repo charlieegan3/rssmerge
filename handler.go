@@ -4,11 +4,16 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"time"
 )
 
 func worker(jobs <-chan url.URL, results chan<- string) {
+	timeout := time.Duration(5 * time.Second)
+	client := http.Client{
+		Timeout: timeout,
+	}
 	for j := range jobs {
-		resp, err := http.Get(j.String())
+		resp, err := client.Get(j.String())
 		if err != nil {
 			results <- ""
 			continue
@@ -48,7 +53,7 @@ func RSSMergeHandler(w http.ResponseWriter, r *http.Request) {
 	feedJobs := make(chan url.URL, len(feedURLs))
 	feedResults := make(chan string, len(feedURLs))
 
-	for i := 1; i <= 10; i++ {
+	for i := 1; i <= 20; i++ {
 		go worker(feedJobs, feedResults)
 	}
 
