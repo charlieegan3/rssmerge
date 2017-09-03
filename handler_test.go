@@ -10,7 +10,7 @@ import (
 	"github.com/mmcdole/gofeed"
 )
 
-func TestScanEndpoint(t *testing.T) {
+func TestHandler(t *testing.T) {
 	feedServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/feed_ars" {
 			pageContent, _ := ioutil.ReadFile("fixtures/feed_ars")
@@ -30,7 +30,7 @@ func TestScanEndpoint(t *testing.T) {
 		}
 	}))
 
-	req, err := http.NewRequest("GET", "/?source="+gist.URL+"/gist_path", nil)
+	req, err := http.NewRequest("GET", "/?source="+gist.URL+"/gist_path&day=true", nil)
 	if err != nil {
 		t.Error(err.Error())
 	}
@@ -55,10 +55,10 @@ func TestScanEndpoint(t *testing.T) {
 		t.Errorf("got %v want %v", feed.Items[0].PublishedParsed.String(), "2017-08-27 17:15:33 +0000 UTC")
 	}
 
-	if fmt.Sprintf("%v", feed.Items[len(feed.Items)-1].Title) != "Drug dens v safe houses: the fight over Ciudad Juárez's abandoned houses" {
-		t.Errorf("got %v want %v", feed.Items[len(feed.Items)-1].Title, "Drug dens v safe houses: the fight over Ciudad Juárez's abandoned houses")
+	if fmt.Sprintf("%v", feed.Items[len(feed.Items)-1].Title) != "Secret Service conducts live test of ShotSpotter system at White House" {
+		t.Errorf("got %v want %v", feed.Items[len(feed.Items)-1].Title, "Secret Service conducts live test of ShotSpotter system at White House")
 	}
-	if fmt.Sprintf("%v", feed.Items[len(feed.Items)-1].PublishedParsed) != "2017-08-11 09:00:54 +0000 UTC" {
-		t.Errorf("got %v want %v", feed.Items[len(feed.Items)-1].PublishedParsed.String(), "2017-08-11 09:00:54 +0000 UTC")
+	if fmt.Sprintf("%v", feed.Items[len(feed.Items)-1].PublishedParsed) != "2017-08-26 17:41:28 +0000 UTC" {
+		t.Errorf("got %v want %v", feed.Items[len(feed.Items)-1].PublishedParsed.String(), "2017-08-26 17:41:28 +0000 UTC")
 	}
 }

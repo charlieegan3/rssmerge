@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"net/url"
 	"time"
+
+	"github.com/gorilla/feeds"
 )
 
 func worker(jobs <-chan url.URL, results chan<- string) {
@@ -50,6 +52,11 @@ func RSSMergeHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	isDay := false
+	if len(r.URL.Query()["day"]) != 0 {
+		isDay = true
+	}
+
 	feedJobs := make(chan url.URL, len(feedURLs))
 	feedResults := make(chan string, len(feedURLs))
 
@@ -69,6 +76,16 @@ func RSSMergeHandler(w http.ResponseWriter, r *http.Request) {
 
 	mergedFeed := Merge(rawFeeds)
 	mergedFeed.Link.Href = sourceURL.String()
+
+	if isDay {
+		var filteredItems []*feeds.Item
+		for _, v := range mergedFeed.Items {
+			if time.Since(v.Created) < time.Since(mergedFeed.Items[0].Created.Add(time.Hour*-24)) {
+				filteredItems = append(filteredItems, v)
+			}
+		}
+		mergedFeed.Items = filteredItems
+	}
 
 	rss, err := mergedFeed.ToRss()
 	if err != nil {
