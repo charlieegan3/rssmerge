@@ -2,9 +2,10 @@ FROM golang:1.10 as build
 
 WORKDIR /go/src/github.com/charlieegan3/rssmerge
 
+RUN go get -u github.com/gobuffalo/packr/packr
+
 COPY . .
 
-RUN go get -u github.com/gobuffalo/packr/packr
 RUN CGO_ENABLED=0 packr build -o rssmerge
 
 
