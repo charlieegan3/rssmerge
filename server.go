@@ -1,14 +1,15 @@
 package main
 
 import (
-	"net"
 	"net/http"
+
+	"github.com/gobuffalo/packr"
 )
 
 func main() {
-	ln, err := net.Listen("tcp", ":3000")
-	if err != nil {
-		panic(err)
-	}
-	http.Serve(ln, http.HandlerFunc(RSSMergeHandler))
+	box := packr.NewBox("./web")
+
+	http.Handle("/build", http.HandlerFunc(RSSMergeHandler))
+	http.Handle("/", http.FileServer(box))
+	http.ListenAndServe(":3000", nil)
 }

@@ -39,7 +39,7 @@
         showURL: function() {
           var sourceURL = rssMerge.input.value.replace(/^\s+|\s+$/g, '');
           if (rssMerge.isValidURL(sourceURL)) {
-            var combinedURL = "https://api-rssmerge.charlieegan3.com/build?source=" + sourceURL
+            var combinedURL = "/build?source=" + sourceURL
             rssMerge.input.value = sourceURL;
             result.innerHTML = "Your combined URL: "
             result.innerHTML += '<a target="_blank" href="' + combinedURL + '">' + combinedURL +  '</a>'
